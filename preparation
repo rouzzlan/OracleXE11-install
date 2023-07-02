@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if ! [ "$USER" = root ]; then
+  echo run this script with sudo
+  exit 3
+fi
+
+yum install glibc binutils gcc libaio libnsl.x86_64 bc net-tools
+
+firewall-cmd --zone=public --permanent --add-port 1521/tcp
+firewall-cmd --zone=public --permanent --add-port 8080/tcp
+firewall-cmd --reload
+
+sysctl kernel.shmmax # check shmmax. must be 4294967295
+echo "kernel.shmmax = 4294967295" >> /etc/sysctl.conf # install shmmax=4294967295 globaly at the next boot
+sysctl -w kernel.shmmax=4294967295 # set shmmax=4294967295 now!
+sysctl kernel.shmmax # check again live shmmax value
+
+
+
+sysctl kernel.shmall # shmall must be 2097152
+echo "kernel.shmall = 2097152" >> /etc/sysctl.conf # install shmall=2097152 at the next boot
+sysctl -w kernel.shmall=2097152 # set shmall=2097152 now!
+sysctl kernel.shmall # check again live shmall value
