@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if ! [ "$USER" = root ]; then
+  echo run this script with sudo
+  exit 3
+fi
+
+/etc/init.d/oracle-xe stop && shutdown
